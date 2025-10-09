@@ -58,7 +58,7 @@ app.use(limiter);
 
 // CORS configuration
 app.use(cors({
-    origin: 'http://localhost:8081',
+    origin: 'http://srv1054032.hstgr.cloud',
     credentials: true
 }));
 

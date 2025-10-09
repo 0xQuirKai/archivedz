@@ -1,6 +1,6 @@
 // API Configuration
 // Replace this URL with your Node.js backend URL
-const API_BASE_URL = 'http://localhost:3000/api';
+const API_BASE_URL = 'http://srv1054032.hstgr.cloud:3000/api';
 
 // Types
 export interface User {
