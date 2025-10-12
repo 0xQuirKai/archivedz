@@ -128,5 +128,23 @@
     "qrDescription": "Obtenez des codes QR uniques pour chaque boîte pour partager vos documents facilement",
     "secureAccess": "Accès sécurisé",
     "secureDescription": "Vos documents sont protégés par authentification et stockage sécurisé"
-  }
+  },
+"public": {
+    "failedToLoadBox": "Échec du chargement de la boîte",
+    "loading": "Chargement...",
+    "boxNotFound": "Boîte introuvable",
+    "boxNotFoundDesc": "Cette boîte n'existe pas ou a été supprimée",
+    "noFileForDownload": "Aucun fichier disponible pour le téléchargement",
+    "noFileForView": "Aucun fichier disponible pour l'affichage",
+    "noEntries": "Aucune entrée dans cette boîte",
+    "size": "Taille",
+    "uploaded": "Téléversé",
+    "titleOnlyEntry": "Entrée titre seulement (aucun fichier joint)",
+    "showPdf": "Afficher le PDF",
+    "download": "Télécharger",
+    "noFileAvailable": "Aucun fichier disponible",
+    "poweredBy": "Propulsé par ArchiveDZ",
+    "pdfViewer": "Visionneuse PDF",
+    "close": "Fermer"
+}
 }
