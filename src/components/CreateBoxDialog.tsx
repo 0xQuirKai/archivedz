@@ -90,9 +90,9 @@ const CreateBoxDialog = ({ open, onOpenChange, onCreate }: CreateBoxDialogProps)
                     <SelectValue placeholder={t('box.selectStatus')} />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="active">{t('box.active')}</SelectItem>
-                    <SelectItem value="inactive">{t('box.inactive')}</SelectItem>
-                    <SelectItem value="archived">{t('box.archived')}</SelectItem>
+                    <SelectItem value="owned">{t('box.owned')}</SelectItem>
+                    <SelectItem value="restricted">{t('box.restricted')}</SelectItem>
+                    <SelectItem value="borrowed">{t('box.borrowed')}</SelectItem>
                   </SelectContent>
                 </Select>
               </div>

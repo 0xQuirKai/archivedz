@@ -11,9 +11,11 @@ import {
 } from "@/components/ui/dialog";
 import { publicAPI, pdfAPI, type Box, type PDF } from "@/lib/api";
 import { toast } from "sonner";
+import { useTranslation } from "react-i18next";
 
 const PublicView = () => {
   const { boxId } = useParams<{ boxId: string }>();
+  const { t } = useTranslation();
   const [box, setBox] = useState<Box | null>(null);
   const [pdfs, setPdfs] = useState<PDF[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -34,7 +36,7 @@ const PublicView = () => {
       setBox(data);
       setPdfs(data.pdfs || []);
     } catch (error) {
-      toast.error("Failed to load box");
+      toast.error(t('public.failedToLoadBox'));
       console.error(error);
     } finally {
       setIsLoading(false);
@@ -49,7 +51,7 @@ const PublicView = () => {
 
   const handleDownload = (pdf: PDF) => {
     if (!pdf.path) {
-      toast.error("No file available for download");
+      toast.error(t('public.noFileForDownload'));
       return;
     }
     const url = pdfAPI.getDownloadUrl(pdf.path);
@@ -60,7 +62,7 @@ const PublicView = () => {
 
   const handleShowPdf = (pdf: PDF) => {
     if (!pdf.path) {
-      toast.error("No file available to view");
+      toast.error(t('public.noFileForView'));
       return;
     }
     setSelectedPdf(pdf);
@@ -75,7 +77,7 @@ const PublicView = () => {
   if (isLoading) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-primary/5 via-background to-accent/5 flex items-center justify-center">
-        <p className="text-muted-foreground">Loading...</p>
+        <p className="text-muted-foreground">{t('public.loading')}</p>
       </div>
     );
   }
@@ -84,8 +86,8 @@ const PublicView = () => {
     return (
       <div className="min-h-screen bg-gradient-to-br from-primary/5 via-background to-accent/5 flex items-center justify-center">
         <div className="text-center">
-          <h1 className="text-2xl font-bold mb-2">Box not found</h1>
-          <p className="text-muted-foreground">This box does not exist or has been removed</p>
+          <h1 className="text-2xl font-bold mb-2">{t('public.boxNotFound')}</h1>
+          <p className="text-muted-foreground">{t('public.boxNotFoundDesc')}</p>
         </div>
       </div>
     );
@@ -97,16 +99,14 @@ const PublicView = () => {
         <div className="max-w-4xl mx-auto">
           <div className="text-center mb-8">
             <h1 className="text-4xl font-bold mb-2">{box.name}</h1>
-            <p className="text-muted-foreground">
-              {pdfs.length} entr{pdfs.length !== 1 ? 'ies' : 'y'} available
-            </p>
+
           </div>
 
           {pdfs.length === 0 ? (
             <Card>
               <CardContent className="py-12 text-center">
                 <FileText className="h-12 w-12 mx-auto mb-4 text-muted-foreground" />
-                <p className="text-muted-foreground">No entries in this box</p>
+                <p className="text-muted-foreground">{t('public.noEntries')}</p>
               </CardContent>
             </Card>
           ) : (
@@ -124,15 +124,15 @@ const PublicView = () => {
                         {pdf.path ? (
                           <>
                             <p className="text-sm text-muted-foreground mb-1">
-                              Size: {formatFileSize(pdf.size)}
+                              {t('public.size')}: {formatFileSize(pdf.size)}
                             </p>
                             <p className="text-xs text-muted-foreground">
-                              Uploaded: {new Date(pdf.uploadDate).toLocaleDateString()}
+                              {t('public.uploaded')}: {new Date(pdf.uploadDate).toLocaleDateString()}
                             </p>
                           </>
                         ) : (
                           <p className="text-sm text-muted-foreground mb-1">
-                            Title-only entry (no file attached)
+                            {t('public.titleOnlyEntry')}
                           </p>
                         )}
                       </div>
@@ -146,20 +146,20 @@ const PublicView = () => {
                           className="flex-1 gap-2"
                         >
                           <Eye className="h-4 w-4" />
-                          Show PDF
+                          {t('public.showPdf')}
                         </Button>
                         <Button
                           onClick={() => handleDownload(pdf)}
                           className="flex-1 gap-2"
                         >
                           <Download className="h-4 w-4" />
-                          Download
+                          {t('public.download')}
                         </Button>
                       </div>
                     ) : (
                       <div className="mt-4 p-3 bg-muted rounded-md text-center">
                         <p className="text-sm text-muted-foreground">
-                          No file available
+                          {t('public.noFileAvailable')}
                         </p>
                       </div>
                     )}
@@ -170,7 +170,7 @@ const PublicView = () => {
           )}
 
           <div className="text-center mt-12 text-sm text-muted-foreground">
-            <p>Powered by ArchiveDZ </p>
+            <p>{t('public.poweredBy')}</p>
           </div>
         </div>
       </div>
@@ -181,7 +181,7 @@ const PublicView = () => {
           <DialogHeader className="p-6 pb-0">
             <div className="flex items-center justify-between">
               <DialogTitle className="text-lg font-semibold truncate">
-                {selectedPdf?.title || "PDF Viewer"}
+                {selectedPdf?.title || t('public.pdfViewer')}
               </DialogTitle>
               <Button
                 variant="ghost"
@@ -209,8 +209,8 @@ const PublicView = () => {
               <div className="text-sm text-muted-foreground">
                 {selectedPdf && (
                   <>
-                    Size: {formatFileSize(selectedPdf.size)} •
-                    Uploaded: {new Date(selectedPdf.uploadDate).toLocaleDateString()}
+                    {t('public.size')}: {formatFileSize(selectedPdf.size)} •
+                    {t('public.uploaded')}: {new Date(selectedPdf.uploadDate).toLocaleDateString()}
                   </>
                 )}
               </div>
@@ -219,7 +219,7 @@ const PublicView = () => {
                   variant="outline"
                   onClick={closePdfDialog}
                 >
-                  Close
+                  {t('public.close')}
                 </Button>
                 {selectedPdf && (
                   <Button
@@ -227,7 +227,7 @@ const PublicView = () => {
                     className="gap-2"
                   >
                     <Download className="h-4 w-4" />
-                    Download
+                    {t('public.download')}
                   </Button>
                 )}
               </div>

@@ -104,6 +104,24 @@
     "uploadWithFiles": "رفع \"{{title}}\" مع {{count}} ملف(ملفات)",
     "orCreateTitleOnly": "أو إنشاء \"{{title}}\" كإدخال عنوان فقط"
   },
+  "public": {
+    "failedToLoadBox": "فشل في تحميل الصندوق",
+    "loading": "جاري التحميل...",
+    "boxNotFound": "الصندوق غير موجود",
+    "boxNotFoundDesc": "هذا الصندوق غير موجود أو تم حذفه",
+    "noFileForDownload": "لا يوجد ملف متاح للتحميل",
+    "noFileForView": "لا يوجد ملف متاح للعرض",
+    "noEntries": "لا توجد إدخالات في هذا الصندوق",
+    "size": "الحجم",
+    "uploaded": "تم الرفع",
+    "titleOnlyEntry": "إدخال عنوان فقط (لا يوجد ملف مرفق)",
+    "showPdf": "عرض PDF",
+    "download": "تحميل",
+    "noFileAvailable": "لا يوجد ملف متاح",
+    "poweredBy": "مدعوم من ArchiveDZ",
+    "pdfViewer": "عارض PDF",
+    "close": "إغلاق"
+  },
   "index": {
     "title": "Archive DZ",
     "description": "نظم وشارك ووصل إلى ملفات PDF الخاصة بك باستخدام رموز QR",
