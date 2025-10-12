@@ -1,6 +1,6 @@
 // API Configuration
 // Replace this URL with your Node.js backend URL
-const API_BASE_URL = 'http://localhost:3000/api';
+const API_BASE_URL = 'http://72.60.215.86:3000/api';
 
 // Types
 export interface User {

@@ -58,7 +58,7 @@ app.use(limiter);
 
 // CORS configuration
 app.use(cors({
-    origin: 'http://localhost:8081',
+    origin: 'http://72.60.215.86',
     credentials: true
 }));
 

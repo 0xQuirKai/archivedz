@@ -6,7 +6,7 @@ This file contains all the API endpoints that need to be implemented in your Nod
 
 Update `API_BASE_URL` in `api.ts` to point to your backend server:
 ```typescript
-const API_BASE_URL = 'http://localhost:3000/api';
+const API_BASE_URL = 'http://72.60.215.86:3000/api';
 ```
 
 ## Required Backend Endpoints
