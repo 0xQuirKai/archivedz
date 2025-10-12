@@ -14,6 +14,7 @@ import {
 } from "@/components/ui/dialog";
 import { boxAPI, pdfAPI, type Box, type PDF } from "@/lib/api";
 import { toast } from "sonner";
+import { useTranslation } from "react-i18next";
 
 const BoxDetail = () => {
   const { boxId } = useParams<{ boxId: string }>();
@@ -25,6 +26,7 @@ const BoxDetail = () => {
   const [showQR, setShowQR] = useState(false);
   const [selectedPdf, setSelectedPdf] = useState<PDF | null>(null);
   const [showPdfDialog, setShowPdfDialog] = useState(false);
+  const { t } = useTranslation();
 
   useEffect(() => {
     const token = localStorage.getItem('authToken');
@@ -174,7 +176,7 @@ const BoxDetail = () => {
                 className="gap-2"
               >
                 <Upload className="h-4 w-4" />
-                Add Entry
+                {t("public.add")}
               </Button>
             </div>
           </div>

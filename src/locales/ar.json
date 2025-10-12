@@ -120,7 +120,8 @@
     "noFileAvailable": "لا يوجد ملف متاح",
     "poweredBy": "مدعوم من ArchiveDZ",
     "pdfViewer": "عارض PDF",
-    "close": "إغلاق"
+    "close": "إغلاق" ,
+    "add" : "اضافة الملفات"
   },
   "index": {
     "title": "Archive DZ",

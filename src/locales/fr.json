@@ -145,6 +145,7 @@
     "noFileAvailable": "Aucun fichier disponible",
     "poweredBy": "Propulsé par ArchiveDZ",
     "pdfViewer": "Visionneuse PDF",
-    "close": "Fermer"
+    "close": "Fermer",
+    "add" : "Ajouter PDFs"
 }
 }
