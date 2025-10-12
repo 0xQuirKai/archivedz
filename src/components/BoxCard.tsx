@@ -5,6 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { useNavigate } from "react-router-dom";
 import { type Box } from "@/lib/api";
 import { formatDate, isRetentionDateClose } from "@/lib/utils";
+import { useTranslation } from "react-i18next";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -25,6 +26,7 @@ interface BoxCardProps {
 
 const BoxCard = ({ box, onDelete, onEdit }: BoxCardProps) => {
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   const getBorderColor = (status: string) => {
     switch (status) {
@@ -48,7 +50,7 @@ const BoxCard = ({ box, onDelete, onEdit }: BoxCardProps) => {
           </div>
           <div className="flex items-center gap-2 text-sm text-muted-foreground">
             <FileText className="h-4 w-4" />
-            <span>{box.pdfCount} PDFs</span>
+            <span>{box.pdfCount} {t('box.pdfs')}</span>
           </div>
         </div>
 
@@ -57,17 +59,17 @@ const BoxCard = ({ box, onDelete, onEdit }: BoxCardProps) => {
           {box.retentionDate && isRetentionDateClose(box.retentionDate) && (
             <Badge variant="destructive" className="text-xs">
               <AlertTriangle className="h-3 w-3 mr-1" />
-              Expiring Soon
+              {t('dashboard.expiringSoon')}
             </Badge>
           )}
         </h3>
 
         <div className="text-sm text-muted-foreground space-y-1">
-          <p>Created {formatDate(box.createdAt)}</p>
+          <p>{t('box.created')} {formatDate(box.createdAt)}</p>
           {box.retentionDate && (
-            <p>Retention: {formatDate(box.retentionDate)}</p>
+            <p>{t('box.retention')}: {formatDate(box.retentionDate)}</p>
           )}
-          <p>Status: <span className="capitalize">{box.status}</span></p>
+          <p>{t('box.status')}: <span className="capitalize">{box.status}</span></p>
         </div>
       </CardContent>
 
@@ -82,29 +84,29 @@ const BoxCard = ({ box, onDelete, onEdit }: BoxCardProps) => {
           }}
         >
           <Edit className="h-4 w-4" />
-          Edit
+          {t('box.edit')}
         </Button>
         <AlertDialog>
           <AlertDialogTrigger asChild onClick={(e) => e.stopPropagation()}>
             <Button variant="ghost" size="sm" className="gap-2 text-destructive hover:text-destructive">
               <Trash2 className="h-4 w-4" />
-              Delete
+              {t('box.delete')}
             </Button>
           </AlertDialogTrigger>
           <AlertDialogContent>
             <AlertDialogHeader>
-              <AlertDialogTitle>Delete box?</AlertDialogTitle>
+              <AlertDialogTitle>{t('box.confirmDelete')}</AlertDialogTitle>
               <AlertDialogDescription>
-                This will permanently delete "{box.name}" and all its PDFs. This action cannot be undone.
+                {t('box.deleteWarning', { name: box.name })}
               </AlertDialogDescription>
             </AlertDialogHeader>
             <AlertDialogFooter>
-              <AlertDialogCancel>Cancel</AlertDialogCancel>
+              <AlertDialogCancel>{t('box.cancel')}</AlertDialogCancel>
               <AlertDialogAction
                 onClick={() => onDelete(box.id)}
                 className="bg-destructive hover:bg-destructive/90"
               >
-                Delete
+                {t('box.delete')}
               </AlertDialogAction>
             </AlertDialogFooter>
           </AlertDialogContent>

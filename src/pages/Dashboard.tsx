@@ -10,8 +10,11 @@ import { Input } from "@/components/ui/input";
 import { boxAPI, type Box } from "@/lib/api";
 import { isRetentionDateClose } from "@/lib/utils";
 import { toast } from "sonner";
+import { useTranslation } from "react-i18next";
 
 const Dashboard = () => {
+  const navigate = useNavigate();
+  const { t } = useTranslation();
   const [boxes, setBoxes] = useState<Box[]>([]);
   const [filteredBoxes, setFilteredBoxes] = useState<Box[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
@@ -19,7 +22,6 @@ const Dashboard = () => {
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [editingBox, setEditingBox] = useState<Box | null>(null);
-  const navigate = useNavigate();
   useEffect(() => {
     const token = localStorage.getItem('authToken');
     if (!token) {
@@ -50,12 +52,10 @@ const Dashboard = () => {
       // Check for expiring boxes
       const expiringBoxes = data.filter(box => box.retentionDate && isRetentionDateClose(box.retentionDate));
       if (expiringBoxes.length > 0) {
-        toast.warning(`You have ${expiringBoxes.length} box(es) with retention date expiring soon.`, {
-          description: expiringBoxes.map(box => box.name).join(', '),
-        });
+        toast.warning(`${t('dashboard.expiringSoon')}: ${expiringBoxes.map(box => box.name).join(', ')}`);
       }
     } catch (error) {
-      toast.error("Failed to load boxes");
+      toast.error(t('dashboard.failedToLoad'));
       console.error(error);
     } finally {
       setIsLoading(false);
@@ -65,10 +65,10 @@ const Dashboard = () => {
   const handleCreateBox = async (name: string, retentionDate?: string, status?: string) => {
     try {
       await boxAPI.create(name, retentionDate, status);
-      toast.success("Box created successfully");
+      toast.success(t('dashboard.boxCreated'));
       loadBoxes();
     } catch (error) {
-      toast.error("Failed to create box");
+      toast.error(t('dashboard.failedToCreate'));
       throw error;
     }
   };
@@ -76,10 +76,10 @@ const Dashboard = () => {
   const handleDeleteBox = async (boxId: string) => {
     try {
       await boxAPI.delete(boxId);
-      toast.success("Box deleted successfully");
+      toast.success(t('dashboard.boxDeleted'));
       loadBoxes();
     } catch (error) {
-      toast.error("Failed to delete box");
+      toast.error(t('dashboard.failedToDelete'));
       throw error;
     }
   };
@@ -92,10 +92,10 @@ const Dashboard = () => {
   const handleUpdateBox = async (boxId: string, name: string, retentionDate?: string, status?: string) => {
     try {
       await boxAPI.update(boxId, name, retentionDate, status);
-      toast.success("Box updated successfully");
+      toast.success(t('dashboard.boxUpdated'));
       loadBoxes();
     } catch (error) {
-      toast.error("Failed to update box");
+      toast.error(t('dashboard.failedToUpdate'));
       throw error;
     }
   };
@@ -108,21 +108,21 @@ const Dashboard = () => {
         <div className="flex flex-col gap-6">
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
             <div>
-              <h2 className="text-3xl font-bold">My Boxes</h2>
+              <h2 className="text-3xl font-bold">{t('dashboard.myBoxes')}</h2>
               <p className="text-muted-foreground">
-                Organize your PDFs in digital boxes
+                {t('dashboard.organizePdfs')}
               </p>
             </div>
             <Button onClick={() => setIsCreateDialogOpen(true)} className="gap-2">
               <Plus className="h-4 w-4" />
-              New Box
+              {t('dashboard.newBox')}
             </Button>
           </div>
 
           <div className="relative max-w-md">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
             <Input
-              placeholder="Search boxes..."
+              placeholder={t('dashboard.searchBoxes')}
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="pl-10"
@@ -131,12 +131,12 @@ const Dashboard = () => {
 
           {isLoading ? (
             <div className="text-center py-12">
-              <p className="text-muted-foreground">Loading boxes...</p>
+              <p className="text-muted-foreground">{t('dashboard.loadingBoxes')}</p>
             </div>
           ) : filteredBoxes.length === 0 ? (
             <div className="text-center py-12">
               <p className="text-muted-foreground">
-                {searchQuery ? "No boxes found" : "No boxes yet. Create your first one!"}
+                {searchQuery ? t('dashboard.noBoxes') : t('dashboard.noBoxes')}
               </p>
             </div>
           ) : (

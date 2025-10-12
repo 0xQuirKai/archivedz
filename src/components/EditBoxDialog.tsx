@@ -18,6 +18,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { type Box } from "@/lib/api";
+import { useTranslation } from "react-i18next";
 
 interface EditBoxDialogProps {
   open: boolean;
@@ -27,6 +28,7 @@ interface EditBoxDialogProps {
 }
 
 const EditBoxDialog = ({ open, onOpenChange, box, onEdit }: EditBoxDialogProps) => {
+  const { t } = useTranslation();
   const [boxName, setBoxName] = useState("");
   const [retentionDate, setRetentionDate] = useState("");
   const [status, setStatus] = useState("active");
@@ -60,18 +62,18 @@ const EditBoxDialog = ({ open, onOpenChange, box, onEdit }: EditBoxDialogProps) 
       <DialogContent>
         <form onSubmit={handleSubmit}>
           <DialogHeader>
-            <DialogTitle>Edit Box</DialogTitle>
+            <DialogTitle>{t('box.editBox')}</DialogTitle>
             <DialogDescription>
-              Update the box details
+              {t('box.updateBoxDetails')}
             </DialogDescription>
           </DialogHeader>
           <div className="py-4">
             <div className="space-y-4">
               <div>
-                <Label htmlFor="edit-box-name">Box Name</Label>
+                <Label htmlFor="edit-box-name">{t('box.boxName')}</Label>
                 <Input
                   id="edit-box-name"
-                  placeholder="e.g., Work Documents"
+                  placeholder={t('box.giveBoxName')}
                   value={boxName}
                   onChange={(e) => setBoxName(e.target.value)}
                   className="mt-2"
@@ -79,7 +81,7 @@ const EditBoxDialog = ({ open, onOpenChange, box, onEdit }: EditBoxDialogProps) 
                 />
               </div>
               <div>
-                <Label htmlFor="edit-retention-date">Retention Date (Optional)</Label>
+                <Label htmlFor="edit-retention-date">{t('box.retentionDate')}</Label>
                 <Input
                   id="edit-retention-date"
                   type="date"
@@ -89,15 +91,15 @@ const EditBoxDialog = ({ open, onOpenChange, box, onEdit }: EditBoxDialogProps) 
                 />
               </div>
               <div>
-                <Label htmlFor="edit-status">Status</Label>
+                <Label htmlFor="edit-status">{t('box.status')}</Label>
                 <Select value={status} onValueChange={setStatus}>
                   <SelectTrigger className="mt-2">
-                    <SelectValue placeholder="Select status" />
+                    <SelectValue placeholder={t('box.selectStatus')} />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="owned">Owned</SelectItem>
-                    <SelectItem value="restricted">Restricted</SelectItem>
-                    <SelectItem value="borrowed">Borrowed</SelectItem>
+                    <SelectItem value="owned">{t('box.owned')}</SelectItem>
+                    <SelectItem value="restricted">{t('box.restricted')}</SelectItem>
+                    <SelectItem value="borrowed">{t('box.borrowed')}</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
@@ -109,10 +111,10 @@ const EditBoxDialog = ({ open, onOpenChange, box, onEdit }: EditBoxDialogProps) 
               variant="outline"
               onClick={() => onOpenChange(false)}
             >
-              Cancel
+              {t('box.cancel')}
             </Button>
             <Button type="submit" disabled={!boxName.trim() || isLoading}>
-              {isLoading ? "Updating..." : "Update Box"}
+              {isLoading ? t('box.updating') : t('box.updateBox')}
             </Button>
           </DialogFooter>
         </form>

@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
 import { toast } from "sonner";
+import { useTranslation } from "react-i18next";
 
 interface UploadZoneWithTitleProps {
   onUpload: (files: File[], title: string) => Promise<void>;
@@ -16,6 +17,7 @@ interface UploadZoneWithTitleProps {
 const MAX_FILE_SIZE = 50 * 1024 * 1024; // 10MB
 
 const UploadZoneWithTitle = ({ onUpload, onTitleOnly, onCancel }: UploadZoneWithTitleProps) => {
+  const { t } = useTranslation();
   const [isDragging, setIsDragging] = useState(false);
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
   const [title, setTitle] = useState("");
@@ -26,12 +28,12 @@ const UploadZoneWithTitle = ({ onUpload, onTitleOnly, onCancel }: UploadZoneWith
 
     for (const file of files) {
       if (file.type !== "application/pdf") {
-        toast.error(`${file.name} is not a PDF file`);
+        toast.error(t('box.notPdfFile', { name: file.name }));
         continue;
       }
 
       if (file.size > MAX_FILE_SIZE) {
-        toast.error(`${file.name} exceeds 10MB limit`);
+        toast.error(t('box.fileTooLarge', { name: file.name }));
         continue;
       }
 
@@ -62,12 +64,12 @@ const UploadZoneWithTitle = ({ onUpload, onTitleOnly, onCancel }: UploadZoneWith
 
   const handleUploadWithFiles = async () => {
     if (!title.trim()) {
-      toast.error("Please enter a title");
+      toast.error(t('box.enterTitleError'));
       return;
     }
 
     if (selectedFiles.length === 0) {
-      toast.error("Please select at least one file or use 'Create Title Only'");
+      toast.error(t('box.selectFileOrTitleOnly'));
       return;
     }
 
@@ -85,7 +87,7 @@ const UploadZoneWithTitle = ({ onUpload, onTitleOnly, onCancel }: UploadZoneWith
 
   const handleTitleOnly = async () => {
     if (!title.trim()) {
-      toast.error("Please enter a title");
+      toast.error(t('box.enterTitleError'));
       return;
     }
 
@@ -105,18 +107,18 @@ const UploadZoneWithTitle = ({ onUpload, onTitleOnly, onCancel }: UploadZoneWith
       {/* Title Input Section */}
       <div className="mb-6">
         <Label htmlFor="entry-title" className="text-base font-semibold">
-          Entry Title *
+          {t('box.entryTitle')}
         </Label>
         <Input
           id="entry-title"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
-          placeholder="Enter a title for this entry..."
+          placeholder={t('box.enterTitlePlaceholder')}
           className="mt-2"
           disabled={isUploading}
         />
         <p className="text-xs text-muted-foreground mt-1">
-          You can create a title-only entry or add files to it
+          {t('box.titleOnlyDescription')}
         </p>
       </div>
 
@@ -137,9 +139,9 @@ const UploadZoneWithTitle = ({ onUpload, onTitleOnly, onCancel }: UploadZoneWith
         onDrop={handleDrop}
       >
         <Upload className="h-12 w-12 mx-auto mb-4 text-muted-foreground" />
-        <h3 className="text-lg font-semibold mb-2">Upload PDF Files (Optional)</h3>
+        <h3 className="text-lg font-semibold mb-2">{t('box.uploadPdfFilesOptional')}</h3>
         <p className="text-sm text-muted-foreground mb-4">
-          Drag and drop PDF files here, or click to browse
+          {t('box.dragDropPdf')}
         </p>
         <input
           type="file"
@@ -152,17 +154,17 @@ const UploadZoneWithTitle = ({ onUpload, onTitleOnly, onCancel }: UploadZoneWith
         />
         <label htmlFor="file-upload">
           <Button type="button" variant="outline" asChild disabled={isUploading}>
-            <span>Browse Files</span>
+            <span>{t('box.browseFiles')}</span>
           </Button>
         </label>
         <p className="text-xs text-muted-foreground mt-4">
-          Maximum file size: 50MB per file and max of 30 files per upload
+          {t('box.maxFileSizeTitle')}
         </p>
       </div>
 
       {selectedFiles.length > 0 && (
         <div className="mt-4 space-y-2">
-          <h4 className="font-medium">Selected Files ({selectedFiles.length})</h4>
+          <h4 className="font-medium">{t('box.selectedFiles')} ({selectedFiles.length})</h4>
           {selectedFiles.map((file, index) => (
             <div
               key={index}
@@ -195,7 +197,7 @@ const UploadZoneWithTitle = ({ onUpload, onTitleOnly, onCancel }: UploadZoneWith
             disabled={isUploading || !title.trim()}
             className="flex-1"
           >
-            {isUploading ? "Uploading..." : `Upload "${title}" with ${selectedFiles.length} file(s)`}
+            {isUploading ? t('box.uploading') : t('box.uploadWithFiles', { title: title.trim(), count: selectedFiles.length })}
           </Button>
         ) : (
           <Button
@@ -205,7 +207,7 @@ const UploadZoneWithTitle = ({ onUpload, onTitleOnly, onCancel }: UploadZoneWith
             variant="default"
           >
             <Plus className="h-4 w-4 mr-2" />
-            {isUploading ? "Creating..." : "Create Title Only"}
+            {isUploading ? t('box.creating') : t('box.createTitleOnly')}
           </Button>
         )}
 
@@ -214,7 +216,7 @@ const UploadZoneWithTitle = ({ onUpload, onTitleOnly, onCancel }: UploadZoneWith
           onClick={onCancel}
           disabled={isUploading}
         >
-          Cancel
+          {t('box.cancel')}
         </Button>
       </div>
 
@@ -228,7 +230,7 @@ const UploadZoneWithTitle = ({ onUpload, onTitleOnly, onCancel }: UploadZoneWith
             className="w-full"
           >
             <Plus className="h-4 w-4 mr-2" />
-            Or create "{title}" as title-only entry
+            {t('box.orCreateTitleOnly', { title: title.trim() })}
           </Button>
         </div>
       )}

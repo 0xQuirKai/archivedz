@@ -3,6 +3,7 @@ import { Upload, X, FileText } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { toast } from "sonner";
+import { useTranslation } from "react-i18next";
 
 interface UploadZoneProps {
   onUpload: (files: File[]) => Promise<void>;
@@ -12,6 +13,7 @@ interface UploadZoneProps {
 const MAX_FILE_SIZE = 50 * 1024 * 1024; // 10MB
 
 const UploadZone = ({ onUpload, onCancel }: UploadZoneProps) => {
+  const { t } = useTranslation();
   const [isDragging, setIsDragging] = useState(false);
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
   const [isUploading, setIsUploading] = useState(false);
@@ -21,12 +23,12 @@ const UploadZone = ({ onUpload, onCancel }: UploadZoneProps) => {
 
     for (const file of files) {
       if (file.type !== "application/pdf") {
-        toast.error(`${file.name} is not a PDF file`);
+        toast.error(t('box.notPdfFile', { name: file.name }));
         continue;
       }
 
       if (file.size > MAX_FILE_SIZE) {
-        toast.error(`${file.name} exceeds 10MB limit`);
+        toast.error(t('box.fileTooLarge', { name: file.name }));
         continue;
       }
 
@@ -85,9 +87,9 @@ const UploadZone = ({ onUpload, onCancel }: UploadZoneProps) => {
         onDrop={handleDrop}
       >
         <Upload className="h-12 w-12 mx-auto mb-4 text-muted-foreground" />
-        <h3 className="text-lg font-semibold mb-2">Upload PDF Files</h3>
+        <h3 className="text-lg font-semibold mb-2">{t('box.uploadPdfFiles')}</h3>
         <p className="text-sm text-muted-foreground mb-4">
-          Drag and drop PDF files here, or click to browse
+          {t('box.dragDropPdf')}
         </p>
         <input
           type="file"
@@ -99,17 +101,17 @@ const UploadZone = ({ onUpload, onCancel }: UploadZoneProps) => {
         />
         <label htmlFor="file-upload">
           <Button type="button" variant="outline" asChild>
-            <span>Browse Files</span>
+            <span>{t('box.browseFiles')}</span>
           </Button>
         </label>
         <p className="text-xs text-muted-foreground mt-4">
-          Maximum file size: 10MB per file
+          {t('box.maxFileSize')}
         </p>
       </div>
 
       {selectedFiles.length > 0 && (
         <div className="mt-4 space-y-2">
-          <h4 className="font-medium">Selected Files ({selectedFiles.length})</h4>
+          <h4 className="font-medium">{t('box.selectedFiles')} ({selectedFiles.length})</h4>
           {selectedFiles.map((file, index) => (
             <div
               key={index}
@@ -139,14 +141,14 @@ const UploadZone = ({ onUpload, onCancel }: UploadZoneProps) => {
               disabled={isUploading}
               className="flex-1"
             >
-              {isUploading ? "Uploading..." : `Upload ${selectedFiles.length} file(s)`}
+              {isUploading ? t('box.uploading') : t('box.uploadFiles', { count: selectedFiles.length })}
             </Button>
             <Button
               variant="outline"
               onClick={onCancel}
               disabled={isUploading}
             >
-              Cancel
+              {t('box.cancel')}
             </Button>
           </div>
         </div>

@@ -17,6 +17,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { useTranslation } from "react-i18next";
 
 interface CreateBoxDialogProps {
   open: boolean;
@@ -25,6 +26,7 @@ interface CreateBoxDialogProps {
 }
 
 const CreateBoxDialog = ({ open, onOpenChange, onCreate }: CreateBoxDialogProps) => {
+  const { t } = useTranslation();
   const [boxName, setBoxName] = useState("");
   const [retentionDate, setRetentionDate] = useState("");
   const [status, setStatus] = useState("active");
@@ -53,15 +55,15 @@ const CreateBoxDialog = ({ open, onOpenChange, onCreate }: CreateBoxDialogProps)
       <DialogContent>
         <form onSubmit={handleSubmit}>
           <DialogHeader>
-            <DialogTitle>Create New Box</DialogTitle>
+            <DialogTitle>{t('box.createNewBox')}</DialogTitle>
             <DialogDescription>
-              Give your box a name to organize your PDFs
+              {t('box.giveBoxName')}
             </DialogDescription>
           </DialogHeader>
           <div className="py-4">
             <div className="space-y-4">
               <div>
-                <Label htmlFor="box-name">Box Name</Label>
+                <Label htmlFor="box-name">{t('box.boxName')}</Label>
                 <Input
                   id="box-name"
                   placeholder="e.g., Work Documents"
@@ -72,7 +74,7 @@ const CreateBoxDialog = ({ open, onOpenChange, onCreate }: CreateBoxDialogProps)
                 />
               </div>
               <div>
-                <Label htmlFor="retention-date">Retention Date (Optional)</Label>
+                <Label htmlFor="retention-date">{t('box.retentionDate')}</Label>
                 <Input
                   id="retention-date"
                   type="date"
@@ -82,15 +84,15 @@ const CreateBoxDialog = ({ open, onOpenChange, onCreate }: CreateBoxDialogProps)
                 />
               </div>
               <div>
-                <Label htmlFor="status">Status</Label>
+                <Label htmlFor="status">{t('box.status')}</Label>
                 <Select value={status} onValueChange={setStatus}>
                   <SelectTrigger className="mt-2">
-                    <SelectValue placeholder="Select status" />
+                    <SelectValue placeholder={t('box.selectStatus')} />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="owned">Owned</SelectItem>
-                    <SelectItem value="restricted">Restricted</SelectItem>
-                    <SelectItem value="borrowed">Borrowed</SelectItem>
+                    <SelectItem value="active">{t('box.active')}</SelectItem>
+                    <SelectItem value="inactive">{t('box.inactive')}</SelectItem>
+                    <SelectItem value="archived">{t('box.archived')}</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
@@ -102,10 +104,10 @@ const CreateBoxDialog = ({ open, onOpenChange, onCreate }: CreateBoxDialogProps)
               variant="outline"
               onClick={() => onOpenChange(false)}
             >
-              Cancel
+              {t('box.cancel')}
             </Button>
             <Button type="submit" disabled={!boxName.trim() || isLoading}>
-              {isLoading ? "Creating..." : "Create Box"}
+              {isLoading ? t('box.creating') : t('box.createBox')}
             </Button>
           </DialogFooter>
         </form>

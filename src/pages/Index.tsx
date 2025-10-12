@@ -2,9 +2,12 @@ import { useNavigate } from "react-router-dom";
 import { Box, Lock, QrCode, Upload } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import { useTranslation } from "react-i18next";
+import LanguageSwitcher from "@/components/LanguageSwitcher";
 
 const Index = () => {
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const token = localStorage.getItem('authToken');
 
   return (
@@ -15,20 +18,22 @@ const Index = () => {
             <div className="p-4 rounded-2xl">
               <img src="/logo.png" alt="Logo" className="h-28 w-28" />
             </div>
-            <h1 className="text-5xl font-bold">Archive Dz</h1>
+            <h1 className="text-5xl font-bold">{t('index.title')}</h1>
           </div>
 
           <p className="text-xl text-muted-foreground mb-8">
-            Organize, share, and access your PDF files with QR codes
+            {t('index.description')}
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center mb-16">
             <Button size="lg" onClick={() => (token ? navigate("/dashboard") : navigate("/auth"))} className="gap-2">
-              Get Started
+              {t('index.getStarted')}
             </Button>
             <Button size="lg" variant="outline" onClick={() => (token ? navigate("/dashboard") : navigate("/auth"))}>
-              Sign In
+              {t('index.signIn')}
             </Button>
+            <LanguageSwitcher />
+
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-12">
@@ -37,9 +42,9 @@ const Index = () => {
                 <div className="bg-primary/10 p-3 rounded-lg w-fit mx-auto mb-4">
                   <Upload className="h-6 w-6 text-primary" />
                 </div>
-                <h3 className="font-semibold mb-2">Upload PDFs</h3>
+                <h3 className="font-semibold mb-2">{t('index.uploadPdfs')}</h3>
                 <p className="text-sm text-muted-foreground">
-                  Organize your documents in custom boxes with drag-and-drop upload
+                  {t('index.uploadDescription')}
                 </p>
               </CardContent>
             </Card>
@@ -49,9 +54,9 @@ const Index = () => {
                 <div className="bg-primary/10 p-3 rounded-lg w-fit mx-auto mb-4">
                   <QrCode className="h-6 w-6 text-primary" />
                 </div>
-                <h3 className="font-semibold mb-2">Generate QR Codes</h3>
+                <h3 className="font-semibold mb-2">{t('index.generateQr')}</h3>
                 <p className="text-sm text-muted-foreground">
-                  Get unique QR codes for each box to share your documents easily
+                  {t('index.qrDescription')}
                 </p>
               </CardContent>
             </Card>
@@ -61,9 +66,9 @@ const Index = () => {
                 <div className="bg-primary/10 p-3 rounded-lg w-fit mx-auto mb-4">
                   <Lock className="h-6 w-6 text-primary" />
                 </div>
-                <h3 className="font-semibold mb-2">Secure Access</h3>
+                <h3 className="font-semibold mb-2">{t('index.secureAccess')}</h3>
                 <p className="text-sm text-muted-foreground">
-                  Your documents are protected with authentication and secure storage
+                  {t('index.secureDescription')}
                 </p>
               </CardContent>
             </Card>

@@ -3,6 +3,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { type PDF, pdfAPI } from "@/lib/api";
+import { useTranslation } from "react-i18next";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -22,6 +23,7 @@ interface PDFCardWithTitleProps {
 }
 
 const PDFCardWithTitle = ({ pdf, onDelete, onShow }: PDFCardWithTitleProps) => {
+  const { t } = useTranslation();
   const formatFileSize = (bytes: number) => {
     if (bytes < 1024) return bytes + " B";
     if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + " KB";
@@ -55,7 +57,7 @@ const PDFCardWithTitle = ({ pdf, onDelete, onShow }: PDFCardWithTitleProps) => {
             <div className="flex items-start gap-2 mb-2">
               <h4 className="font-medium truncate flex-1">{pdf.title}</h4>
               <Badge variant={hasFile ? "default" : "secondary"} className="text-xs">
-                {hasFile ? "With File" : "Title Only"}
+                {hasFile ? t('box.withFile') : t('box.titleOnly')}
               </Badge>
             </div>
 
@@ -69,7 +71,7 @@ const PDFCardWithTitle = ({ pdf, onDelete, onShow }: PDFCardWithTitleProps) => {
             )}
 
             <p className="text-xs text-muted-foreground">
-              Created: {new Date(pdf.uploadDate).toLocaleDateString()} at{" "}
+              {t('box.createdAt')} {new Date(pdf.uploadDate).toLocaleDateString()} {t('box.at')}{" "}
               {new Date(pdf.uploadDate).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
             </p>
           </div>
@@ -86,7 +88,7 @@ const PDFCardWithTitle = ({ pdf, onDelete, onShow }: PDFCardWithTitleProps) => {
                   className="flex-1 gap-2"
                 >
                   <Eye className="h-3 w-3" />
-                  Show PDF
+                  {t('box.showPdf')}
                 </Button>
               )}
               <Button
@@ -96,12 +98,12 @@ const PDFCardWithTitle = ({ pdf, onDelete, onShow }: PDFCardWithTitleProps) => {
                 className={onShow ? "flex-1 gap-2" : "flex-1 gap-2"}
               >
                 <Download className="h-3 w-3" />
-                Download
+                {t('box.download')}
               </Button>
             </>
           ) : (
             <div className="flex-1 text-center py-2 text-sm text-muted-foreground">
-              No file attached
+              {t('box.noFileAttached')}
             </div>
           )}
 
@@ -113,20 +115,21 @@ const PDFCardWithTitle = ({ pdf, onDelete, onShow }: PDFCardWithTitleProps) => {
             </AlertDialogTrigger>
             <AlertDialogContent>
               <AlertDialogHeader>
-                <AlertDialogTitle>Delete Entry?</AlertDialogTitle>
+                <AlertDialogTitle>{t('box.deleteEntry')}</AlertDialogTitle>
                 <AlertDialogDescription>
-                  This will permanently delete "{pdf.title}"
-                  {hasFile && pdf.filename && ` and its attached file "${pdf.originalName || pdf.filename}"`}.
-                  This action cannot be undone.
+                  {t('box.deleteEntryWarning', {
+                    title: pdf.title,
+                    fileText: hasFile && pdf.filename ? t('box.andAttachedFile', { filename: pdf.originalName || pdf.filename }) : ''
+                  })}
                 </AlertDialogDescription>
               </AlertDialogHeader>
               <AlertDialogFooter>
-                <AlertDialogCancel>Cancel</AlertDialogCancel>
+                <AlertDialogCancel>{t('box.cancel')}</AlertDialogCancel>
                 <AlertDialogAction
                   onClick={() => onDelete(pdf.id)}
                   className="bg-destructive hover:bg-destructive/90"
                 >
-                  Delete
+                  {t('box.delete')}
                 </AlertDialogAction>
               </AlertDialogFooter>
             </AlertDialogContent>

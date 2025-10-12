@@ -3,6 +3,8 @@ import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 import { authAPI } from "@/lib/api";
 import { toast } from "sonner";
+import LanguageSwitcher from "./LanguageSwitcher";
+import { useTranslation } from "react-i18next";
 
 interface HeaderProps {
   showLogout?: boolean;
@@ -10,6 +12,7 @@ interface HeaderProps {
 
 const Header = ({ showLogout = true }: HeaderProps) => {
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   const handleLogout = () => {
     authAPI.logout();
@@ -30,17 +33,20 @@ const Header = ({ showLogout = true }: HeaderProps) => {
           <h1 className="text-xl font-bold text-foreground">Archive DZ</h1>
         </div>
 
-        {showLogout && (
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={handleLogout}
-            className="gap-2"
-          >
-            <LogOut className="h-4 w-4" />
-            Logout
-          </Button>
-        )}
+        <div className="flex items-center gap-2">
+          <LanguageSwitcher />
+          {showLogout && (
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={handleLogout}
+              className="gap-2"
+            >
+              <LogOut className="h-4 w-4" />
+              {t('common.logout')}
+            </Button>
+          )}
+        </div>
       </div>
     </header>
   );

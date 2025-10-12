@@ -2,6 +2,7 @@ import { FileText, Download, Trash2 } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { type PDF, pdfAPI } from "@/lib/api";
+import { useTranslation } from "react-i18next";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -20,6 +21,7 @@ interface PDFCardProps {
 }
 
 const PDFCard = ({ pdf, onDelete }: PDFCardProps) => {
+  const { t } = useTranslation();
   const formatFileSize = (bytes: number) => {
     if (bytes < 1024) return bytes + " B";
     if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + " KB";
@@ -38,7 +40,7 @@ const PDFCard = ({ pdf, onDelete }: PDFCardProps) => {
           <div className="bg-primary/10 p-2 rounded">
             <FileText className="h-5 w-5 text-primary" />
           </div>
-          
+
           <div className="flex-1 min-w-0">
             <h4 className="font-medium truncate mb-1">{pdf.filename}</h4>
             <p className="text-sm text-muted-foreground">
@@ -58,9 +60,9 @@ const PDFCard = ({ pdf, onDelete }: PDFCardProps) => {
             className="flex-1 gap-2"
           >
             <Download className="h-3 w-3" />
-            Download
+            {t('box.download')}
           </Button>
-          
+
           <AlertDialog>
             <AlertDialogTrigger asChild>
               <Button variant="ghost" size="sm" className="text-destructive hover:text-destructive">
@@ -69,18 +71,18 @@ const PDFCard = ({ pdf, onDelete }: PDFCardProps) => {
             </AlertDialogTrigger>
             <AlertDialogContent>
               <AlertDialogHeader>
-                <AlertDialogTitle>Delete PDF?</AlertDialogTitle>
+                <AlertDialogTitle>{t('box.deletePdf')}</AlertDialogTitle>
                 <AlertDialogDescription>
-                  This will permanently delete "{pdf.filename}". This action cannot be undone.
+                  {t('box.deletePdfWarning', { name: pdf.filename })}
                 </AlertDialogDescription>
               </AlertDialogHeader>
               <AlertDialogFooter>
-                <AlertDialogCancel>Cancel</AlertDialogCancel>
+                <AlertDialogCancel>{t('box.cancel')}</AlertDialogCancel>
                 <AlertDialogAction
                   onClick={() => onDelete(pdf.id)}
                   className="bg-destructive hover:bg-destructive/90"
                 >
-                  Delete
+                  {t('box.delete')}
                 </AlertDialogAction>
               </AlertDialogFooter>
             </AlertDialogContent>

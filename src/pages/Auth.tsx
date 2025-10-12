@@ -8,9 +8,11 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Box } from "lucide-react";
 import { authAPI } from "@/lib/api";
 import { toast } from "sonner";
+import { useTranslation } from "react-i18next";
 
 const Auth = () => {
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const [isLoading, setIsLoading] = useState(false);
 
   // Login form state
@@ -29,10 +31,10 @@ const Auth = () => {
 
     try {
       await authAPI.login(loginEmail, loginPassword);
-      toast.success("Login successful!");
+      toast.success(t('auth.loginSuccessful'));
       navigate("/dashboard");
     } catch (error) {
-      toast.error(error instanceof Error ? error.message : "Login failed");
+      toast.error(error instanceof Error ? error.message : t('auth.loginFailed'));
     } finally {
       setIsLoading(false);
     }
@@ -44,10 +46,10 @@ const Auth = () => {
 
     try {
       await authAPI.register(registerName, registerEmail, registerPassword, registerLicenseCode);
-      toast.success("Registration successful!");
+      toast.success(t('auth.registrationSuccessful'));
       navigate("/dashboard");
     } catch (error) {
-      toast.error(error instanceof Error ? error.message : "Registration failed");
+      toast.error(error instanceof Error ? error.message : t('auth.registrationFailed'));
     } finally {
       setIsLoading(false);
     }
@@ -65,20 +67,20 @@ const Auth = () => {
 
         <Tabs defaultValue="login" className="w-full">
           <TabsList className="grid w-full grid-cols-2">
-            <TabsTrigger value="login">Login</TabsTrigger>
-            <TabsTrigger value="register">Register</TabsTrigger>
+            <TabsTrigger value="login">{t('auth.login')}</TabsTrigger>
+            <TabsTrigger value="register">{t('auth.register')}</TabsTrigger>
           </TabsList>
 
           <TabsContent value="login">
             <Card>
               <CardHeader>
-                <CardTitle>Welcome back</CardTitle>
-                <CardDescription>Login to access your PDF boxes</CardDescription>
+                <CardTitle>{t('auth.welcomeBack')}</CardTitle>
+                <CardDescription>{t('auth.loginToAccess')}</CardDescription>
               </CardHeader>
               <CardContent>
                 <form onSubmit={handleLogin} className="space-y-4">
                   <div className="space-y-2">
-                    <Label htmlFor="login-email">Email</Label>
+                    <Label htmlFor="login-email">{t('auth.email')}</Label>
                     <Input
                       id="login-email"
                       type="email"
@@ -89,7 +91,7 @@ const Auth = () => {
                     />
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="login-password">Password</Label>
+                    <Label htmlFor="login-password">{t('auth.password')}</Label>
                     <Input
                       id="login-password"
                       type="password"
@@ -100,7 +102,7 @@ const Auth = () => {
                     />
                   </div>
                   <Button type="submit" className="w-full" disabled={isLoading}>
-                    {isLoading ? "Logging in..." : "Login"}
+                    {isLoading ? t('auth.loggingIn') : t('auth.login')}
                   </Button>
                 </form>
               </CardContent>
@@ -110,13 +112,13 @@ const Auth = () => {
           <TabsContent value="register">
             <Card>
               <CardHeader>
-                <CardTitle>Create an account</CardTitle>
-                <CardDescription>Get started with Digital PDF Boxes</CardDescription>
+                <CardTitle>{t('auth.createAccount')}</CardTitle>
+                <CardDescription>{t('auth.getStarted')}</CardDescription>
               </CardHeader>
               <CardContent>
                 <form onSubmit={handleRegister} className="space-y-4">
                   <div className="space-y-2">
-                    <Label htmlFor="register-name">Name</Label>
+                    <Label htmlFor="register-name">{t('auth.name')}</Label>
                     <Input
                       id="register-name"
                       type="text"
@@ -127,7 +129,7 @@ const Auth = () => {
                     />
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="register-email">Email</Label>
+                    <Label htmlFor="register-email">{t('auth.email')}</Label>
                     <Input
                       id="register-email"
                       type="email"
@@ -138,7 +140,7 @@ const Auth = () => {
                     />
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="register-password">Password</Label>
+                    <Label htmlFor="register-password">{t('auth.password')}</Label>
                     <Input
                       id="register-password"
                       type="password"
@@ -150,18 +152,18 @@ const Auth = () => {
                     />
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="register-license">License Code</Label>
+                    <Label htmlFor="register-license">{t('auth.licenseCode')}</Label>
                     <Input
                       id="register-license"
                       type="text"
-                      placeholder="Enter your license code"
+                      placeholder={t('auth.enterLicenseCode')}
                       value={registerLicenseCode}
                       onChange={(e) => setRegisterLicenseCode(e.target.value)}
                       required
                     />
                   </div>
                   <Button type="submit" className="w-full" disabled={isLoading}>
-                    {isLoading ? "Creating account..." : "Create account"}
+                    {isLoading ? t('auth.creatingAccount') : t('auth.createAccountBtn')}
                   </Button>
                 </form>
               </CardContent>
