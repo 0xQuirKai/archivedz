@@ -46,12 +46,14 @@ router.get('/', authenticateToken, async(req, res) => {
       SELECT
         b.id,
         b.name,
+        b.retention_date as retentionDate,
+        b.status,
         b.created_at as createdAt,
         COUNT(p.id) as pdfCount
       FROM boxes b
       LEFT JOIN pdfs p ON b.id = p.box_id
       WHERE b.user_id = ?
-      GROUP BY b.id, b.name, b.created_at
+      GROUP BY b.id, b.name, b.retention_date, b.status, b.created_at
       ORDER BY b.created_at DESC
     `, [req.user.id]);
 
@@ -72,7 +74,7 @@ router.get('/:boxId', authenticateToken, async(req, res) => {
 
         // Get box details
         const box = await dbGet(`
-      SELECT id, name, created_at as createdAt
+      SELECT id, name, retention_date as retentionDate, status, created_at as createdAt
       FROM boxes
       WHERE id = ? AND user_id = ?
     `, [boxId, req.user.id]);
@@ -117,7 +119,7 @@ router.get('/:boxId', authenticateToken, async(req, res) => {
 // Create new box
 router.post('/', authenticateToken, async(req, res) => {
     try {
-        const { name } = req.body;
+        const { name, retentionDate, status } = req.body;
 
         if (!name || name.trim().length === 0) {
             return res.status(400).json({
@@ -128,11 +130,11 @@ router.post('/', authenticateToken, async(req, res) => {
 
         const boxId = uuidv4();
         const result = await dbRun(
-            'INSERT INTO boxes (id, name, user_id) VALUES (?, ?, ?)', [boxId, name.trim(), req.user.id]
+            'INSERT INTO boxes (id, name, user_id, retention_date, status) VALUES (?, ?, ?, ?, ?)', [boxId, name.trim(), req.user.id, retentionDate || null, status || 'active']
         );
 
         const newBox = await dbGet(`
-      SELECT id, name, created_at as createdAt
+      SELECT id, name, retention_date as retentionDate, status, created_at as createdAt
       FROM boxes
       WHERE id = ?
     `, [boxId]);
@@ -154,7 +156,7 @@ router.post('/', authenticateToken, async(req, res) => {
 router.put('/:boxId', authenticateToken, async(req, res) => {
     try {
         const { boxId } = req.params;
-        const { name } = req.body;
+        const { name, retentionDate, status } = req.body;
 
         if (!name || name.trim().length === 0) {
             return res.status(400).json({
@@ -177,7 +179,7 @@ router.put('/:boxId', authenticateToken, async(req, res) => {
 
         // Update box
         await dbRun(
-            'UPDATE boxes SET name = ? WHERE id = ?', [name.trim(), boxId]
+            'UPDATE boxes SET name = ?, retention_date = ?, status = ? WHERE id = ?', [name.trim(), retentionDate || null, status || 'active', boxId]
         );
 
         // Get updated box with PDF count
@@ -185,12 +187,14 @@ router.put('/:boxId', authenticateToken, async(req, res) => {
       SELECT
         b.id,
         b.name,
+        b.retention_date as retentionDate,
+        b.status,
         b.created_at as createdAt,
         COUNT(p.id) as pdfCount
       FROM boxes b
       LEFT JOIN pdfs p ON b.id = p.box_id
       WHERE b.id = ?
-      GROUP BY b.id, b.name, b.created_at
+      GROUP BY b.id, b.name, b.retention_date, b.status, b.created_at
     `, [boxId]);
 
         res.json(updatedBox);
@@ -269,7 +273,7 @@ router.get('/:boxId/qr', authenticateToken, async(req, res) => {
         }
 
         // Generate QR code URL (assuming frontend is at same domain with different port or path)
-        const baseUrl = 'https://archivedz.cloud';
+        const baseUrl = 'https://72.60.215.86';
         const qrUrl = `${baseUrl}/view/${boxId}`;
 
         // Generate QR code

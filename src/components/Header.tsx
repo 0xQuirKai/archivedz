@@ -19,17 +19,17 @@ const Header = ({ showLogout = true }: HeaderProps) => {
 
   return (
     <header className="border-b bg-card/50 backdrop-blur-sm sticky top-0 z-50">
-      <div className="container mx-auto px-4 py-4 flex items-center justify-between">
-        <div 
-          className="flex items-center gap-2 cursor-pointer" 
+      <div className="container mx-auto px-4 flex items-center justify-between">
+        <div
+          className="flex items-center gap-2 cursor-pointer"
           onClick={() => navigate("/")}
         >
-          <div className="bg-primary p-2 rounded-lg">
-            <Box className="h-6 w-6 text-primary-foreground" />
+          <div className="p-2 rounded-lg">
+            <img src="/logo.png" alt="Logo" className="h-16 w-16" />
           </div>
-          <h1 className="text-xl font-bold text-foreground">Digital PDF Boxes</h1>
+          <h1 className="text-xl font-bold text-foreground">Archive DZ</h1>
         </div>
-        
+
         {showLogout && (
           <Button
             variant="ghost"

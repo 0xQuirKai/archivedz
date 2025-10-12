@@ -1,8 +1,10 @@
-import { Box as BoxIcon, FileText, Trash2 } from "lucide-react";
+import { Box as BoxIcon, FileText, Trash2, Edit, AlertTriangle } from "lucide-react";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 import { useNavigate } from "react-router-dom";
 import { type Box } from "@/lib/api";
+import { formatDate, isRetentionDateClose } from "@/lib/utils";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -18,13 +20,27 @@ import {
 interface BoxCardProps {
   box: Box;
   onDelete: (boxId: string) => void;
+  onEdit: (box: Box) => void;
 }
 
-const BoxCard = ({ box, onDelete }: BoxCardProps) => {
+const BoxCard = ({ box, onDelete, onEdit }: BoxCardProps) => {
   const navigate = useNavigate();
 
+  const getBorderColor = (status: string) => {
+    switch (status) {
+      case 'owned':
+        return 'border-green-500';
+      case 'restricted':
+        return 'border-red-500';
+      case 'borrowed':
+        return 'border-gray-500';
+      default:
+        return 'border-primary/50';
+    }
+  };
+
   return (
-    <Card className="group hover:shadow-lg transition-all duration-300 cursor-pointer border-2 hover:border-primary/50">
+    <Card className={`group hover:shadow-lg transition-all duration-300 cursor-pointer border-2 ${getBorderColor(box.status)} hover:shadow-xl`}>
       <CardContent className="pt-6" onClick={() => navigate(`/box/${box.id}`)}>
         <div className="flex items-start justify-between mb-4">
           <div className="bg-primary/10 p-3 rounded-lg">
@@ -35,17 +51,39 @@ const BoxCard = ({ box, onDelete }: BoxCardProps) => {
             <span>{box.pdfCount} PDFs</span>
           </div>
         </div>
-        
-        <h3 className="text-xl font-semibold mb-2 group-hover:text-primary transition-colors">
+
+        <h3 className="text-xl font-semibold mb-2 group-hover:text-primary transition-colors flex items-center gap-2">
           {box.name}
+          {box.retentionDate && isRetentionDateClose(box.retentionDate) && (
+            <Badge variant="destructive" className="text-xs">
+              <AlertTriangle className="h-3 w-3 mr-1" />
+              Expiring Soon
+            </Badge>
+          )}
         </h3>
-        
-        <p className="text-sm text-muted-foreground">
-          Created {new Date(box.createdAt).toLocaleDateString()}
-        </p>
+
+        <div className="text-sm text-muted-foreground space-y-1">
+          <p>Created {formatDate(box.createdAt)}</p>
+          {box.retentionDate && (
+            <p>Retention: {formatDate(box.retentionDate)}</p>
+          )}
+          <p>Status: <span className="capitalize">{box.status}</span></p>
+        </div>
       </CardContent>
-      
-      <CardFooter className="pt-0">
+
+      <CardFooter className="pt-0 flex justify-between">
+        <Button
+          variant="ghost"
+          size="sm"
+          className="gap-2"
+          onClick={(e) => {
+            e.stopPropagation();
+            onEdit(box);
+          }}
+        >
+          <Edit className="h-4 w-4" />
+          Edit
+        </Button>
         <AlertDialog>
           <AlertDialogTrigger asChild onClick={(e) => e.stopPropagation()}>
             <Button variant="ghost" size="sm" className="gap-2 text-destructive hover:text-destructive">

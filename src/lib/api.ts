@@ -1,6 +1,6 @@
 // API Configuration
 // Replace this URL with your Node.js backend URL
-const API_BASE_URL = 'http://srv1054032.hstgr.cloud:3000/api';
+const API_BASE_URL = 'http://localhost:3000/api';
 
 // Types
 export interface User {
@@ -15,6 +15,8 @@ export interface Box {
   name: string;
   pdfCount: number;
   createdAt: string;
+  retentionDate?: string;
+  status: string;
   qrCode?: string;
 }
 
@@ -65,10 +67,10 @@ export const authAPI = {
     return data;
   },
 
-  register: async (name: string, email: string, password: string): Promise<User> => {
+  register: async (name: string, email: string, password: string, licenseCode: string): Promise<User> => {
     const data = await apiCall('/auth/register', {
       method: 'POST',
-      body: JSON.stringify({ name, email, password }),
+      body: JSON.stringify({ name, email, password, licenseCode }),
     });
     if (data.token) {
       localStorage.setItem('authToken', data.token);
@@ -95,17 +97,17 @@ export const boxAPI = {
     return apiCall(`/boxes/${boxId}`);
   },
 
-  create: async (name: string): Promise<Box> => {
+  create: async (name: string, retentionDate?: string, status?: string): Promise<Box> => {
     return apiCall('/boxes', {
       method: 'POST',
-      body: JSON.stringify({ name }),
+      body: JSON.stringify({ name, retentionDate, status }),
     });
   },
 
-  update: async (boxId: string, name: string): Promise<Box> => {
+  update: async (boxId: string, name: string, retentionDate?: string, status?: string): Promise<Box> => {
     return apiCall(`/boxes/${boxId}`, {
       method: 'PUT',
-      body: JSON.stringify({ name }),
+      body: JSON.stringify({ name, retentionDate, status }),
     });
   },
 

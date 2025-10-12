@@ -2,10 +2,61 @@ import express from 'express';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import { v4 as uuidv4 } from 'uuid';
-import { dbRun, dbGet } from '../config/database.js';
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
+import { dbRun, dbGet, dbAll } from '../config/database.js';
 import { authenticateToken } from '../middleware/auth.js';
 
+const __filename = fileURLToPath(
+    import.meta.url);
+const __dirname = path.dirname(__filename);
+
 const router = express.Router();
+
+// Helper function to validate license code
+const validateLicenseCode = async(licenseCode) => {
+    try {
+        const licenseFilePath = path.join(__dirname, '..', 'license-codes.json');
+        const licenseData = JSON.parse(fs.readFileSync(licenseFilePath, 'utf8'));
+
+        if (!licenseData.licenseCodes[licenseCode]) {
+            return { valid: false, message: 'Invalid license code' };
+        }
+
+        const license = licenseData.licenseCodes[licenseCode];
+
+        // Check if license has reached max uses
+        if (license.currentUses >= license.maxUses) {
+            return { valid: false, message: 'License code has reached maximum usage limit' };
+        }
+
+        return { valid: true, license };
+    } catch (error) {
+        console.error('License validation error:', error);
+        return { valid: false, message: 'License validation failed' };
+    }
+};
+
+// Helper function to increment license usage
+const incrementLicenseUsage = async(licenseCode, userId) => {
+    try {
+        const licenseFilePath = path.join(__dirname, '..', 'license-codes.json');
+        const licenseData = JSON.parse(fs.readFileSync(licenseFilePath, 'utf8'));
+
+        if (licenseData.licenseCodes[licenseCode]) {
+            licenseData.licenseCodes[licenseCode].currentUses += 1;
+            fs.writeFileSync(licenseFilePath, JSON.stringify(licenseData, null, 2));
+
+            // Record usage in database
+            await dbRun(
+                'INSERT INTO license_usage (id, license_code, user_id) VALUES (?, ?, ?)', [uuidv4(), licenseCode, userId]
+            );
+        }
+    } catch (error) {
+        console.error('License usage increment error:', error);
+    }
+};
 
 // Helper function to generate JWT token
 const generateToken = (userId) => {
@@ -17,13 +68,13 @@ const generateToken = (userId) => {
 // Register endpoint
 router.post('/register', async(req, res) => {
     try {
-        const { name, email, password } = req.body;
+        const { name, email, password, licenseCode } = req.body;
 
         // Validation
-        if (!name || !email || !password) {
+        if (!name || !email || !password || !licenseCode) {
             return res.status(400).json({
                 error: 'Missing required fields',
-                message: 'Name, email, and password are required'
+                message: 'Name, email, password, and license code are required'
             });
         }
 
@@ -31,6 +82,15 @@ router.post('/register', async(req, res) => {
             return res.status(400).json({
                 error: 'Invalid password',
                 message: 'Password must be at least 6 characters long'
+            });
+        }
+
+        // Validate license code
+        const licenseValidation = await validateLicenseCode(licenseCode);
+        if (!licenseValidation.valid) {
+            return res.status(400).json({
+                error: 'Invalid license code',
+                message: licenseValidation.message
             });
         }
 
@@ -43,6 +103,17 @@ router.post('/register', async(req, res) => {
             });
         }
 
+        // Check if license code has already been used by this email
+        const existingLicenseUsage = await dbGet(
+            'SELECT id FROM license_usage WHERE license_code = ? AND user_id IN (SELECT id FROM users WHERE email = ?)', [licenseCode, email]
+        );
+        if (existingLicenseUsage) {
+            return res.status(400).json({
+                error: 'License code already used',
+                message: 'This license code has already been used by this email address'
+            });
+        }
+
         // Hash password
         const saltRounds = 12;
         const hashedPassword = await bcrypt.hash(password, saltRounds);
@@ -52,6 +123,9 @@ router.post('/register', async(req, res) => {
         await dbRun(
             'INSERT INTO users (id, name, email, password) VALUES (?, ?, ?, ?)', [userId, name, email, hashedPassword]
         );
+
+        // Increment license usage
+        await incrementLicenseUsage(licenseCode, userId);
 
         // Generate token
         const token = generateToken(userId);

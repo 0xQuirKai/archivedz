@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -17,29 +17,36 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { type Box } from "@/lib/api";
 
-interface CreateBoxDialogProps {
+interface EditBoxDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  onCreate: (name: string, retentionDate?: string, status?: string) => Promise<void>;
+  box: Box | null;
+  onEdit: (boxId: string, name: string, retentionDate?: string, status?: string) => Promise<void>;
 }
 
-const CreateBoxDialog = ({ open, onOpenChange, onCreate }: CreateBoxDialogProps) => {
+const EditBoxDialog = ({ open, onOpenChange, box, onEdit }: EditBoxDialogProps) => {
   const [boxName, setBoxName] = useState("");
   const [retentionDate, setRetentionDate] = useState("");
   const [status, setStatus] = useState("active");
   const [isLoading, setIsLoading] = useState(false);
 
+  useEffect(() => {
+    if (box) {
+      setBoxName(box.name);
+      setRetentionDate(box.retentionDate ? new Date(box.retentionDate).toISOString().split('T')[0] : "");
+      setStatus(box.status);
+    }
+  }, [box]);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!boxName.trim()) return;
+    if (!boxName.trim() || !box) return;
 
     setIsLoading(true);
     try {
-      await onCreate(boxName, retentionDate || undefined, status);
-      setBoxName("");
-      setRetentionDate("");
-      setStatus("active");
+      await onEdit(box.id, boxName, retentionDate || undefined, status);
       onOpenChange(false);
     } catch (error) {
       console.error(error);
@@ -53,17 +60,17 @@ const CreateBoxDialog = ({ open, onOpenChange, onCreate }: CreateBoxDialogProps)
       <DialogContent>
         <form onSubmit={handleSubmit}>
           <DialogHeader>
-            <DialogTitle>Create New Box</DialogTitle>
+            <DialogTitle>Edit Box</DialogTitle>
             <DialogDescription>
-              Give your box a name to organize your PDFs
+              Update the box details
             </DialogDescription>
           </DialogHeader>
           <div className="py-4">
             <div className="space-y-4">
               <div>
-                <Label htmlFor="box-name">Box Name</Label>
+                <Label htmlFor="edit-box-name">Box Name</Label>
                 <Input
-                  id="box-name"
+                  id="edit-box-name"
                   placeholder="e.g., Work Documents"
                   value={boxName}
                   onChange={(e) => setBoxName(e.target.value)}
@@ -72,9 +79,9 @@ const CreateBoxDialog = ({ open, onOpenChange, onCreate }: CreateBoxDialogProps)
                 />
               </div>
               <div>
-                <Label htmlFor="retention-date">Retention Date (Optional)</Label>
+                <Label htmlFor="edit-retention-date">Retention Date (Optional)</Label>
                 <Input
-                  id="retention-date"
+                  id="edit-retention-date"
                   type="date"
                   value={retentionDate}
                   onChange={(e) => setRetentionDate(e.target.value)}
@@ -82,7 +89,7 @@ const CreateBoxDialog = ({ open, onOpenChange, onCreate }: CreateBoxDialogProps)
                 />
               </div>
               <div>
-                <Label htmlFor="status">Status</Label>
+                <Label htmlFor="edit-status">Status</Label>
                 <Select value={status} onValueChange={setStatus}>
                   <SelectTrigger className="mt-2">
                     <SelectValue placeholder="Select status" />
@@ -105,7 +112,7 @@ const CreateBoxDialog = ({ open, onOpenChange, onCreate }: CreateBoxDialogProps)
               Cancel
             </Button>
             <Button type="submit" disabled={!boxName.trim() || isLoading}>
-              {isLoading ? "Creating..." : "Create Box"}
+              {isLoading ? "Updating..." : "Update Box"}
             </Button>
           </DialogFooter>
         </form>
@@ -114,4 +121,4 @@ const CreateBoxDialog = ({ open, onOpenChange, onCreate }: CreateBoxDialogProps)
   );
 };
 
-export default CreateBoxDialog;
+export default EditBoxDialog;

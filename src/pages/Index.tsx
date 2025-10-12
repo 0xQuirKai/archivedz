@@ -5,27 +5,28 @@ import { Card, CardContent } from "@/components/ui/card";
 
 const Index = () => {
   const navigate = useNavigate();
+  const token = localStorage.getItem('authToken');
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-primary/5 via-background to-accent/5">
       <div className="container mx-auto px-4 py-16">
         <div className="max-w-4xl mx-auto text-center">
           <div className="flex items-center justify-center gap-3 mb-6">
-            <div className="bg-primary p-4 rounded-2xl">
-              <Box className="h-10 w-10 text-primary-foreground" />
+            <div className="p-4 rounded-2xl">
+              <img src="/logo.png" alt="Logo" className="h-28 w-28" />
             </div>
-            <h1 className="text-5xl font-bold">Digital PDF Boxes</h1>
+            <h1 className="text-5xl font-bold">Archive Dz</h1>
           </div>
-          
+
           <p className="text-xl text-muted-foreground mb-8">
             Organize, share, and access your PDF files with QR codes
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center mb-16">
-            <Button size="lg" onClick={() => navigate("/auth")} className="gap-2">
+            <Button size="lg" onClick={() => (token ? navigate("/dashboard") : navigate("/auth"))} className="gap-2">
               Get Started
             </Button>
-            <Button size="lg" variant="outline" onClick={() => navigate("/auth")}>
+            <Button size="lg" variant="outline" onClick={() => (token ? navigate("/dashboard") : navigate("/auth"))}>
               Sign In
             </Button>
           </div>

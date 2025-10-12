@@ -21,6 +21,7 @@ const Auth = () => {
   const [registerName, setRegisterName] = useState("");
   const [registerEmail, setRegisterEmail] = useState("");
   const [registerPassword, setRegisterPassword] = useState("");
+  const [registerLicenseCode, setRegisterLicenseCode] = useState("");
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -42,7 +43,7 @@ const Auth = () => {
     setIsLoading(true);
 
     try {
-      await authAPI.register(registerName, registerEmail, registerPassword);
+      await authAPI.register(registerName, registerEmail, registerPassword, registerLicenseCode);
       toast.success("Registration successful!");
       navigate("/dashboard");
     } catch (error) {
@@ -146,6 +147,17 @@ const Auth = () => {
                       onChange={(e) => setRegisterPassword(e.target.value)}
                       required
                       minLength={6}
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="register-license">License Code</Label>
+                    <Input
+                      id="register-license"
+                      type="text"
+                      placeholder="Enter your license code"
+                      value={registerLicenseCode}
+                      onChange={(e) => setRegisterLicenseCode(e.target.value)}
+                      required
                     />
                   </div>
                   <Button type="submit" className="w-full" disabled={isLoading}>

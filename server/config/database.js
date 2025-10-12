@@ -74,6 +74,8 @@ export const initializeDatabase = async() => {
         id TEXT PRIMARY KEY,
         name TEXT NOT NULL,
         user_id TEXT NOT NULL,
+        retention_date DATETIME,
+        status TEXT DEFAULT 'active',
         created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
         FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE
       )
@@ -94,10 +96,23 @@ export const initializeDatabase = async() => {
       )
     `);
 
+        // License codes usage table
+        await dbRun(`
+      CREATE TABLE IF NOT EXISTS license_usage (
+        id TEXT PRIMARY KEY,
+        license_code TEXT NOT NULL,
+        user_id TEXT NOT NULL,
+        used_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+        FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE,
+        UNIQUE(license_code, user_id)
+      )
+    `);
+
         // Create indexes for better performance
         await dbRun('CREATE INDEX IF NOT EXISTS idx_boxes_user_id ON boxes (user_id)');
         await dbRun('CREATE INDEX IF NOT EXISTS idx_pdfs_box_id ON pdfs (box_id)');
         await dbRun('CREATE INDEX IF NOT EXISTS idx_users_email ON users (email)');
+        await dbRun('CREATE INDEX IF NOT EXISTS idx_license_usage_code ON license_usage (license_code)');
 
         // Migration: Handle existing databases with old schema
         try {
@@ -152,6 +167,25 @@ export const initializeDatabase = async() => {
                 console.log('✅ Database schema migration completed');
             } else {
                 console.log('ℹ️ Database schema is already up to date');
+            }
+
+            // Check if boxes table has retention_date and status columns
+            const boxesTableInfo = await dbAll('PRAGMA table_info(boxes)');
+            const hasRetentionDate = boxesTableInfo.some(col => col.name === 'retention_date');
+            const hasStatus = boxesTableInfo.some(col => col.name === 'status');
+
+            if (!hasRetentionDate || !hasStatus) {
+                console.log('🔄 Migrating boxes table to add retention_date and status...');
+
+                // Add columns if they don't exist
+                if (!hasRetentionDate) {
+                    await dbRun('ALTER TABLE boxes ADD COLUMN retention_date DATETIME');
+                }
+                if (!hasStatus) {
+                    await dbRun('ALTER TABLE boxes ADD COLUMN status TEXT DEFAULT \'active\'');
+                }
+
+                console.log('✅ Boxes table migration completed');
             }
         } catch (error) {
             console.error('❌ Migration error:', error);

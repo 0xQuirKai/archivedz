@@ -4,26 +4,29 @@ import { Plus, Search } from "lucide-react";
 import Header from "@/components/Header";
 import BoxCard from "@/components/BoxCard";
 import CreateBoxDialog from "@/components/CreateBoxDialog";
+import EditBoxDialog from "@/components/EditBoxDialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { boxAPI, type Box } from "@/lib/api";
+import { isRetentionDateClose } from "@/lib/utils";
 import { toast } from "sonner";
 
 const Dashboard = () => {
-  const navigate = useNavigate();
   const [boxes, setBoxes] = useState<Box[]>([]);
   const [filteredBoxes, setFilteredBoxes] = useState<Box[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [isLoading, setIsLoading] = useState(true);
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
-
+  const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
+  const [editingBox, setEditingBox] = useState<Box | null>(null);
+  const navigate = useNavigate();
   useEffect(() => {
     const token = localStorage.getItem('authToken');
     if (!token) {
       navigate('/auth');
       return;
     }
-    loadBoxes();
+    loadBoxes()
   }, [navigate]);
 
   useEffect(() => {
@@ -43,6 +46,14 @@ const Dashboard = () => {
       const data = await boxAPI.getAll();
       setBoxes(data);
       setFilteredBoxes(data);
+
+      // Check for expiring boxes
+      const expiringBoxes = data.filter(box => box.retentionDate && isRetentionDateClose(box.retentionDate));
+      if (expiringBoxes.length > 0) {
+        toast.warning(`You have ${expiringBoxes.length} box(es) with retention date expiring soon.`, {
+          description: expiringBoxes.map(box => box.name).join(', '),
+        });
+      }
     } catch (error) {
       toast.error("Failed to load boxes");
       console.error(error);
@@ -51,9 +62,9 @@ const Dashboard = () => {
     }
   };
 
-  const handleCreateBox = async (name: string) => {
+  const handleCreateBox = async (name: string, retentionDate?: string, status?: string) => {
     try {
-      await boxAPI.create(name);
+      await boxAPI.create(name, retentionDate, status);
       toast.success("Box created successfully");
       loadBoxes();
     } catch (error) {
@@ -69,13 +80,30 @@ const Dashboard = () => {
       loadBoxes();
     } catch (error) {
       toast.error("Failed to delete box");
+      throw error;
+    }
+  };
+
+  const handleEditBox = (box: Box) => {
+    setEditingBox(box);
+    setIsEditDialogOpen(true);
+  };
+
+  const handleUpdateBox = async (boxId: string, name: string, retentionDate?: string, status?: string) => {
+    try {
+      await boxAPI.update(boxId, name, retentionDate, status);
+      toast.success("Box updated successfully");
+      loadBoxes();
+    } catch (error) {
+      toast.error("Failed to update box");
+      throw error;
     }
   };
 
   return (
     <div className="min-h-screen bg-background">
       <Header />
-      
+
       <main className="container mx-auto px-4 py-8">
         <div className="flex flex-col gap-6">
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
@@ -118,6 +146,7 @@ const Dashboard = () => {
                   key={box.id}
                   box={box}
                   onDelete={handleDeleteBox}
+                  onEdit={handleEditBox}
                 />
               ))}
             </div>
@@ -129,6 +158,13 @@ const Dashboard = () => {
         open={isCreateDialogOpen}
         onOpenChange={setIsCreateDialogOpen}
         onCreate={handleCreateBox}
+      />
+
+      <EditBoxDialog
+        open={isEditDialogOpen}
+        onOpenChange={setIsEditDialogOpen}
+        box={editingBox}
+        onEdit={handleUpdateBox}
       />
     </div>
   );

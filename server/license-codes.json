@@ -1,0 +1,304 @@
+{
+    "licenseCodes": {
+        "A1B2C3": {
+            "code": "A1B2C3",
+            "maxUses": 4,
+            "currentUses": 0,
+            "description": "Professional License - 4 users"
+        },
+        "D4E5F6": {
+            "code": "D4E5F6",
+            "maxUses": 4,
+            "currentUses": 0,
+            "description": "Professional License - 4 users"
+        },
+        "G7H8I9": {
+            "code": "G7H8I9",
+            "maxUses": 4,
+            "currentUses": 0,
+            "description": "Professional License - 4 users"
+        },
+        "J0K1L2": {
+            "code": "J0K1L2",
+            "maxUses": 4,
+            "currentUses": 0,
+            "description": "Professional License - 4 users"
+        },
+        "M3N4O5": {
+            "code": "M3N4O5",
+            "maxUses": 4,
+            "currentUses": 0,
+            "description": "Professional License - 4 users"
+        },
+        "P6Q7R8": {
+            "code": "P6Q7R8",
+            "maxUses": 4,
+            "currentUses": 0,
+            "description": "Professional License - 4 users"
+        },
+        "S9T0U1": {
+            "code": "S9T0U1",
+            "maxUses": 4,
+            "currentUses": 0,
+            "description": "Professional License - 4 users"
+        },
+        "V2W3X4": {
+            "code": "V2W3X4",
+            "maxUses": 4,
+            "currentUses": 0,
+            "description": "Professional License - 4 users"
+        },
+        "Y5Z6A7": {
+            "code": "Y5Z6A7",
+            "maxUses": 4,
+            "currentUses": 0,
+            "description": "Professional License - 4 users"
+        },
+        "B8C9D0": {
+            "code": "B8C9D0",
+            "maxUses": 4,
+            "currentUses": 0,
+            "description": "Professional License - 4 users"
+        },
+        "E1F2G3": {
+            "code": "E1F2G3",
+            "maxUses": 4,
+            "currentUses": 0,
+            "description": "Professional License - 4 users"
+        },
+        "H4I5J6": {
+            "code": "H4I5J6",
+            "maxUses": 4,
+            "currentUses": 0,
+            "description": "Professional License - 4 users"
+        },
+        "K7L8M9": {
+            "code": "K7L8M9",
+            "maxUses": 4,
+            "currentUses": 0,
+            "description": "Professional License - 4 users"
+        },
+        "N0O1P2": {
+            "code": "N0O1P2",
+            "maxUses": 4,
+            "currentUses": 0,
+            "description": "Professional License - 4 users"
+        },
+        "Q3R4S5": {
+            "code": "Q3R4S5",
+            "maxUses": 4,
+            "currentUses": 0,
+            "description": "Professional License - 4 users"
+        },
+        "T6U7V8": {
+            "code": "T6U7V8",
+            "maxUses": 4,
+            "currentUses": 0,
+            "description": "Professional License - 4 users"
+        },
+        "W9X0Y1": {
+            "code": "W9X0Y1",
+            "maxUses": 4,
+            "currentUses": 0,
+            "description": "Professional License - 4 users"
+        },
+        "Z2A3B4": {
+            "code": "Z2A3B4",
+            "maxUses": 4,
+            "currentUses": 0,
+            "description": "Professional License - 4 users"
+        },
+        "C5D6E7": {
+            "code": "C5D6E7",
+            "maxUses": 4,
+            "currentUses": 0,
+            "description": "Professional License - 4 users"
+        },
+        "F8G9H0": {
+            "code": "F8G9H0",
+            "maxUses": 4,
+            "currentUses": 0,
+            "description": "Professional License - 4 users"
+        },
+        "I1J2K3": {
+            "code": "I1J2K3",
+            "maxUses": 4,
+            "currentUses": 0,
+            "description": "Professional License - 4 users"
+        },
+        "L4M5N6": {
+            "code": "L4M5N6",
+            "maxUses": 4,
+            "currentUses": 0,
+            "description": "Professional License - 4 users"
+        },
+        "O7P8Q9": {
+            "code": "O7P8Q9",
+            "maxUses": 4,
+            "currentUses": 0,
+            "description": "Professional License - 4 users"
+        },
+        "R0S1T2": {
+            "code": "R0S1T2",
+            "maxUses": 4,
+            "currentUses": 0,
+            "description": "Professional License - 4 users"
+        },
+        "U3V4W5": {
+            "code": "U3V4W5",
+            "maxUses": 4,
+            "currentUses": 0,
+            "description": "Professional License - 4 users"
+        },
+        "X6Y7Z8": {
+            "code": "X6Y7Z8",
+            "maxUses": 4,
+            "currentUses": 0,
+            "description": "Professional License - 4 users"
+        },
+        "A9B0C1": {
+            "code": "A9B0C1",
+            "maxUses": 4,
+            "currentUses": 0,
+            "description": "Professional License - 4 users"
+        },
+        "D2E3F4": {
+            "code": "D2E3F4",
+            "maxUses": 4,
+            "currentUses": 0,
+            "description": "Professional License - 4 users"
+        },
+        "G5H6I7": {
+            "code": "G5H6I7",
+            "maxUses": 4,
+            "currentUses": 0,
+            "description": "Professional License - 4 users"
+        },
+        "J8K9L0": {
+            "code": "J8K9L0",
+            "maxUses": 4,
+            "currentUses": 0,
+            "description": "Professional License - 4 users"
+        },
+        "M1N2O3": {
+            "code": "M1N2O3",
+            "maxUses": 4,
+            "currentUses": 0,
+            "description": "Professional License - 4 users"
+        },
+        "P4Q5R6": {
+            "code": "P4Q5R6",
+            "maxUses": 4,
+            "currentUses": 0,
+            "description": "Professional License - 4 users"
+        },
+        "S7T8U9": {
+            "code": "S7T8U9",
+            "maxUses": 4,
+            "currentUses": 0,
+            "description": "Professional License - 4 users"
+        },
+        "V0W1X2": {
+            "code": "V0W1X2",
+            "maxUses": 4,
+            "currentUses": 0,
+            "description": "Professional License - 4 users"
+        },
+        "Y3Z4A5": {
+            "code": "Y3Z4A5",
+            "maxUses": 4,
+            "currentUses": 0,
+            "description": "Professional License - 4 users"
+        },
+        "B6C7D8": {
+            "code": "B6C7D8",
+            "maxUses": 4,
+            "currentUses": 0,
+            "description": "Professional License - 4 users"
+        },
+        "E9F0G1": {
+            "code": "E9F0G1",
+            "maxUses": 4,
+            "currentUses": 0,
+            "description": "Professional License - 4 users"
+        },
+        "H2I3J4": {
+            "code": "H2I3J4",
+            "maxUses": 4,
+            "currentUses": 0,
+            "description": "Professional License - 4 users"
+        },
+        "K5L6M7": {
+            "code": "K5L6M7",
+            "maxUses": 4,
+            "currentUses": 0,
+            "description": "Professional License - 4 users"
+        },
+        "N8O9P0": {
+            "code": "N8O9P0",
+            "maxUses": 4,
+            "currentUses": 0,
+            "description": "Professional License - 4 users"
+        },
+        "Q1R2S3": {
+            "code": "Q1R2S3",
+            "maxUses": 4,
+            "currentUses": 0,
+            "description": "Professional License - 4 users"
+        },
+        "T4U5V6": {
+            "code": "T4U5V6",
+            "maxUses": 4,
+            "currentUses": 0,
+            "description": "Professional License - 4 users"
+        },
+        "W7X8Y9": {
+            "code": "W7X8Y9",
+            "maxUses": 4,
+            "currentUses": 0,
+            "description": "Professional License - 4 users"
+        },
+        "Z0A1B2": {
+            "code": "Z0A1B2",
+            "maxUses": 4,
+            "currentUses": 0,
+            "description": "Professional License - 4 users"
+        },
+        "C3D4E5": {
+            "code": "C3D4E5",
+            "maxUses": 4,
+            "currentUses": 0,
+            "description": "Professional License - 4 users"
+        },
+        "F6G7H8": {
+            "code": "F6G7H8",
+            "maxUses": 4,
+            "currentUses": 0,
+            "description": "Professional License - 4 users"
+        },
+        "I9J0K1": {
+            "code": "I9J0K1",
+            "maxUses": 4,
+            "currentUses": 0,
+            "description": "Professional License - 4 users"
+        },
+        "L2M3N4": {
+            "code": "L2M3N4",
+            "maxUses": 4,
+            "currentUses": 0,
+            "description": "Professional License - 4 users"
+        },
+        "O5P6Q7": {
+            "code": "O5P6Q7",
+            "maxUses": 4,
+            "currentUses": 0,
+            "description": "Professional License - 4 users"
+        },
+        "R8S9T0": {
+            "code": "R8S9T0",
+            "maxUses": 4,
+            "currentUses": 0,
+            "description": "Professional License - 4 users"
+        }
+    }
+}
