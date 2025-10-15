@@ -273,7 +273,7 @@ router.get('/:boxId/qr', authenticateToken, async(req, res) => {
         }
 
         // Generate QR code URL (assuming frontend is at same domain with different port or path)
-        const baseUrl = 'https://72.60.215.86';
+        const baseUrl = 'https://archivedz.shop';
         const qrUrl = `${baseUrl}/view/${boxId}`;
 
         // Generate QR code

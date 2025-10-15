@@ -58,7 +58,7 @@ app.use(limiter);
 
 // CORS configuration
 app.use(cors({
-    origin: 'http://72.60.215.86',
+    origin: 'https://archivedz.shop',
     credentials: true
 }));
 
